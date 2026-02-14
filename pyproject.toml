@@ -2,9 +2,9 @@
 authors = ["David Andersson <anderssonpublic@gmail.com>"]
 classifiers = [
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.7",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
   "License :: OSI Approved :: Apache Software License",
   "Operating System :: OS Independent",
   "Development Status :: 5 - Production/Stable",
@@ -34,19 +34,18 @@ openalchemy = "open_alchemy.cli:main"
 
 [tool.poetry.dependencies]
 Jinja2 = "^3"
-SQLAlchemy = "^1.0"
-jsonschema = "^3"
-python = "^3.7"
-sqlalchemy-stubs = ">=0.3,<0.5"
-typing_extensions = {version = "^3.7.4", python = "<3.8"}
+SQLAlchemy = "^2.0"
+jsonschema = "^4"
+python = "^3.10"
+typing_extensions = "^4.6"
 
 [tool.poetry.extras]
 wheel = ["wheel"]
 yaml = ["PyYAML"]
 
-[tool.poetry.dev-dependencies]
-Flask-SQLAlchemy = "^2"
-PyYAML = "^5"
+[tool.poetry.group.dev.dependencies]
+Flask-SQLAlchemy = "^3"
+PyYAML = "^6"
 Sphinx = "^3"
 alembic = "^1"
 bandit = "^1"
@@ -62,7 +61,6 @@ pydocstyle = "^6"
 pylint = "^2"
 pytest = "^6"
 pytest-cov = "^2"
-pytest-flake8 = "^1"
 pytest-flask = "^1"
 pytest-flask-sqlalchemy = "^1"
 pytest-randomly = "^3"
