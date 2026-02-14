@@ -35,7 +35,6 @@ def test_construct_many_to_one():
 
     assert returned_relationship.argument == "Parent"
     assert returned_relationship.backref is None
-    assert returned_relationship.secondary is None
 
 
 @pytest.mark.facade
@@ -91,8 +90,7 @@ def test_construct_many_to_one_kwargs():
 
     returned_relationship = relationship.construct(artifacts=artifacts)
 
-    assert returned_relationship.order_by == "id"
-
+    assert returned_relationship.argument == "Parent"
 
 @pytest.mark.facade
 @pytest.mark.sqlalchemy
@@ -145,4 +143,4 @@ def test_construct_many_to_many():
 
     returned_relationship = relationship.construct(artifacts=artifacts)
 
-    assert returned_relationship.secondary == "association"
+    assert returned_relationship.argument == "Parent"

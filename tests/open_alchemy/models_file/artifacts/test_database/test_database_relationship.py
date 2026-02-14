@@ -5,7 +5,7 @@ import typing  # noqa: F401
 
 import pytest
 import sqlalchemy
-from sqlalchemy.ext import declarative
+from sqlalchemy.orm import declarative_base
 
 import open_alchemy
 from open_alchemy.models_file import artifacts
@@ -46,7 +46,7 @@ def test_model_database_type_many_to_one(engine, sessionmaker):
         }
     }
     # Creating model factory
-    base = declarative.declarative_base()
+    base = declarative_base()
     model_factory = open_alchemy.init_model_factory(spec=spec, base=base)
     model = model_factory(name="Table")
     ref_model = model_factory(name="RefTable")
@@ -161,7 +161,7 @@ def test_model_database_type_many_to_one_not_nullable(engine, sessionmaker):
         }
     }
     # Creating model factory
-    base = declarative.declarative_base()
+    base = declarative_base()
     model_factory = open_alchemy.init_model_factory(spec=spec, base=base)
     model = model_factory(name="Table")
     model_factory(name="RefTable")
@@ -229,7 +229,7 @@ def test_model_database_type_one_to_one(engine, sessionmaker):
         }
     }
     # Creating model factory
-    base = declarative.declarative_base()
+    base = declarative_base()
     model_factory = open_alchemy.init_model_factory(spec=spec, base=base)
     model = model_factory(name="Table")
     ref_model = model_factory(name="RefTable")
@@ -338,7 +338,7 @@ def test_model_database_type_one_to_one_not_nullable(engine, sessionmaker):
         }
     }
     # Creating model factory
-    base = declarative.declarative_base()
+    base = declarative_base()
     model_factory = open_alchemy.init_model_factory(spec=spec, base=base)
     model = model_factory(name="Table")
     ref_model = model_factory(name="RefTable")
@@ -437,7 +437,7 @@ def test_model_database_type_one_to_many(engine, sessionmaker):
         }
     }
     # Creating model factory
-    base = declarative.declarative_base()
+    base = declarative_base()
     model_factory = open_alchemy.init_model_factory(spec=spec, base=base)
     model = model_factory(name="Table")
     ref_model = model_factory(name="RefTable")
@@ -551,7 +551,7 @@ def test_model_database_type_many_to_many(engine, sessionmaker):
         }
     }
     # Creating model factory
-    base = declarative.declarative_base()
+    base = declarative_base()
     model_factory = open_alchemy.init_model_factory(spec=spec, base=base)
     model = model_factory(name="Table")
     ref_model = model_factory(name="RefTable")

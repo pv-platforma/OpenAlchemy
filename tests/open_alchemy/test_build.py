@@ -73,10 +73,10 @@ def test_get_schemas_valid():
     [
         pytest.param(
             {"Schema1": {}},
-            "version 1",
+            "1.0.0",
             None,
             None,
-            '{"info":{"version":"version 1"},"components":{"schemas":{"Schema1":{}}}}',
+            '{"info":{"version":"1.0.0"},"components":{"schemas":{"Schema1":{}}}}',
             id="no title description",
         ),
         pytest.param(
@@ -212,7 +212,7 @@ def test_generate_setup():
     THEN the setup.py file contents with the name and version are returned.
     """
     name = "name 1"
-    version = "version 1"
+    version = "1.0.0"
 
     returned_contents = build.generate_setup(name=name, version=version)
 
@@ -220,7 +220,7 @@ def test_generate_setup():
 
 setuptools.setup(
     name="name 1",
-    version="version 1",
+    version="1.0.0",
     packages=setuptools.find_packages(),
     python_requires=">=3.7",
     install_requires=[
@@ -602,9 +602,9 @@ def test_dump_path_name_is_file(tmp_path):
             id="spec info version not string",
         ),
         pytest.param(
-            {"info": {"version": "version 1"}},
+            {"info": {"version": "1.0.0"}},
             {"key": "value 1"},
-            "version 1",
+            "1.0.0",
             id="spec info version string",
         ),
     ],
@@ -651,7 +651,7 @@ def test_execute(tmp_path, package_format, extensions):
     dist.mkdir()
 
     name = "app_models"
-    version = "version 1"
+    version = "1.0.0"
     spec = {
         "info": {
             "version": version,
@@ -730,17 +730,17 @@ init_json(parent_path / "spec.json")"""
 
 
 @pytest.mark.integration
-def test_build_dist_wheel_import_error(tmp_path):
+def test_build_dist_wheel_build_error(tmp_path, monkeypatch):
     """
-    GIVEN wheel package is not available
-    WHEN build_dist is called
-    THEN RuntimeError is raised.
+    GIVEN a setup that will cause bdist_wheel to fail
+    WHEN build_dist is called with WHEEL format
+    THEN RuntimeError is raised with appropriate message.
     """
     dist = tmp_path / "dist"
     dist.mkdir()
 
     name = "app_models"
-    version = "version 1"
+    version = "1.0.0"
     spec = {
         "info": {
             "version": version,
@@ -756,14 +756,18 @@ def test_build_dist_wheel_import_error(tmp_path):
         },
     }
 
-    try:
-        command.run(["pip", "uninstall", "-y", "wheel"], ".")
-        with pytest.raises(RuntimeError):
-            build.execute(
-                spec=spec, name=name, path=str(dist), format_=build.PackageFormat.WHEEL
-            )
-    finally:
-        command.run(["pip", "install", "wheel"], ".")
+    # First create the package structure
+    build.execute(spec=spec, name=name, path=str(dist), format_=build.PackageFormat.NONE)
+    
+    # Now corrupt the setup.py to cause a build failure
+    setup_py = dist / name / "setup.py"
+    setup_py.write_text("raise Exception('Simulated build failure')\n")
+    
+    # Attempt to build wheel - should raise RuntimeError
+    with pytest.raises(RuntimeError) as exc_info:
+        build.build_wheel(name=name, path=str(dist))
+    
+    assert "wheel package" in str(exc_info.value)
 
 
 @pytest.mark.parametrize(

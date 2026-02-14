@@ -189,6 +189,12 @@ To run tests:
 poetry run pytest
 ```
 
+To run flake8:
+
+````bash
+poetry run flake8 open_alchemy tests
+```
+
 Make your changes and raise a pull request.
 
 ## Compiling Docs
